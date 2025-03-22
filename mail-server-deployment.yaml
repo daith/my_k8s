@@ -1,0 +1,197 @@
+# K8s Mail Server Stack with StatefulSet, PVC, Cert-Manager, PostfixAdmin, DNS-01
+
+---
+# 1. MariaDB StatefulSet 用於帳號管理（持久化）
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mariadb-pvc
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mariadb
+spec:
+  selector:
+    matchLabels:
+      app: mariadb
+  serviceName: mariadb
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+      - name: mariadb
+        image: mariadb:10.7
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: rootpassword
+        - name: MYSQL_DATABASE
+          value: mailserver
+        - name: MYSQL_USER
+          value: mailuser
+        - name: MYSQL_PASSWORD
+          value: mailpass
+        ports:
+        - containerPort: 3306
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postfixadmin
+spec:
+  selector:
+    app: postfixadmin
+
+  ports:
+  - port: 80
+    targetPort: 80
+
+---
+# 5. Cert-Manager ClusterIssuer (DNS-01 for Cloudflare)
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-http
+spec:
+  acme:
+    email: admin@foson.co
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-http
+    solvers:
+    - http01:
+        ingress:
+          class: public
+
+---
+# 6. Mailserver ConfigMap (placeholder to prevent mount error)
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mailserver-config
+data:
+  dummy: "This is a placeholder ConfigMap for docker-mailserver volume mount"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postfixadmin-config
+  labels:
+    app: postfixadmin
+  namespace: default
+data:
+  config.local.php: |
+    <?php
+    // Setup password removed after initial setup to disable setup.php
+    
+---
+# PostfixAdmin Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postfixadmin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postfixadmin
+  template:
+    metadata:
+      labels:
+        app: postfixadmin
+    spec:
+      containers:
+      - name: postfixadmin
+        image: postfixadmin:3.3
+        env:
+        - name: POSTFIXADMIN_DB_TYPE
+          value: mysqli
+        - name: POSTFIXADMIN_DB_HOST
+          value: mariadb
+        - name: POSTFIXADMIN_DB_NAME
+          value: mailserver
+        - name: POSTFIXADMIN_DB_USER
+          value: mailuser
+        - name: POSTFIXADMIN_DB_PASSWORD
+          value: mailpass
+        volumeMounts:
+        - name: postfixadmin-config
+          mountPath: /www/postfixadmin/config.local.php
+          subPath: config.local.php
+        ports:
+        - containerPort: 80
+      volumes:
+      - name: postfixadmin-config
+        configMap:
+          name: postfixadmin-config
+
+# 6. Cloudflare API token secret
+
+---
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-nginx
+  namespace: ingress
+spec:
+  type: NodePort
+  selector:
+    name: nginx-ingress-microk8s
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      nodePort: 30080
+    - name: https
+      port: 443
+      targetPort: 443
+      nodePort: 30443
+
+# 7. Ingress with TLS for RainLoop & PostfixAdmin
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mail-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-http"
+spec:
+  tls:
+  - hosts:
+    - mail.foson.co
+    - admin.mail.foson.co
+    secretName: mail-tls
+  rules:
+  - host: mail.foson.co
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rainloop
+            port:
+              number: 80
+  - host: admin.mail.foson.co
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: postfixadmin
+            port:
+              number: 80
+

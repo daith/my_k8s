@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odoo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: odoo
+  template:
+    metadata:
+      labels:
+        app: odoo
+    spec:
+      containers:
+        - name: odoo
+          image: odoo:18.0
+          ports:
+            - containerPort: 8069
+          env:
+            - name: HOST
+              value: "postgres"
+            - name: USER
+              value: "odoo"
+            - name: PASSWORD
+              value: "odoo"
+          volumeMounts:
+            - name: odoo-data
+              mountPath: /var/lib/odoo  # Odoo 數據
+            - name: odoo-config
+              mountPath: /etc/odoo  # 設定檔
+            - name: odoo-addons
+              mountPath: /mnt/extra-addons  # 外掛（addons）
+      volumes:
+        - name: odoo-data
+          persistentVolumeClaim:
+            claimName: odoo-pvc
+        - name: odoo-config
+          persistentVolumeClaim:
+            claimName: odoo-config-pvc
+        - name: odoo-addons
+          persistentVolumeClaim:
