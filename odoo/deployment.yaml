@@ -30,17 +30,19 @@ spec:
               value: "5432"
           volumeMounts:
             - name: odoo-data
-              mountPath: /var/lib/odoo  # Odoo 數據
+              mountPath: /var/lib/odoo
             - name: odoo-config
-              mountPath: /etc/odoo  # 設定檔
+              mountPath: /etc/odoo/odoo.conf
+              subPath: odoo.conf
             - name: odoo-addons
-              mountPath: /mnt/extra-addons  # 外掛（addons）
+              mountPath: /mnt/extra-addons
       volumes:
         - name: odoo-data
           persistentVolumeClaim:
             claimName: odoo-pvc
         - name: odoo-config
-          persistentVolumeClaim:
-            claimName: odoo-config-pvc
+          configMap:
+            name: odoo-config
         - name: odoo-addons
           persistentVolumeClaim:
+            claimName: odoo-addons-pvc
