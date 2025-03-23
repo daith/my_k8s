@@ -46,7 +46,6 @@ spec:
       - name: config-volume
         configMap:
           name: postfixadmin-config
-
 ---
 apiVersion: v1
 kind: Service
@@ -59,4 +58,3 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
-
