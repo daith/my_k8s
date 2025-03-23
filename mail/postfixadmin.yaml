@@ -16,6 +16,7 @@ data:
     $CONF['database_user'] = 'mailuser';
     $CONF['database_password'] = 'mailpass';
     $CONF['database_name'] = 'mailserver';
+    $CONF['configured'] = true;
 
 ---
 apiVersion: apps/v1
