@@ -14,11 +14,11 @@ spec:
     spec:
       containers:
         - name: rainloop
-          image: hardware/rainloop
+          image: ghcr.io/newargus/docker-rainloop:latest
           ports:
-            - containerPort: 80
+            - containerPort: 8888
           volumeMounts:
-            - name: rainloop-storage
+            - name: rainloop-data
               mountPath: /rainloop/data
       volumes:
         - name: rainloop-storage
