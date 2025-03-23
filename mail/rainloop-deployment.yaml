@@ -14,9 +14,9 @@ spec:
     spec:
       containers:
         - name: rainloop
-          image: hardware/rainloop
+          image: crazymax/rainloop:latest
           ports:
-            - containerPort: 80
+            - containerPort: 8888
           volumeMounts:
             - name: rainloop-storage
               mountPath: /data
