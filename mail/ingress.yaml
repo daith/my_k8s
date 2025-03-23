@@ -5,7 +5,8 @@ metadata:
   name: mail-ingress
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-http"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+
 spec:
   tls:
     - hosts:
