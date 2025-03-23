@@ -40,7 +40,7 @@ spec:
         - containerPort: 80
         volumeMounts:
         - name: config-volume
-          mountPath: /var/www/html/config.local.php
+          mountPath: /var/www/html/config/config.local.php
           subPath: config.local.php
       volumes:
       - name: config-volume
