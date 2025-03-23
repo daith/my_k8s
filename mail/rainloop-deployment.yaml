@@ -18,7 +18,7 @@ spec:
           ports:
             - containerPort: 8888
           volumeMounts:
-            - name: rainloop-data
+            - name: rainloop-storage
               mountPath: /rainloop/data
       volumes:
         - name: rainloop-storage
