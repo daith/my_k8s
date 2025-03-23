@@ -13,3 +13,4 @@ resources:
   - rainloop-deployment.yaml
   - rainloop-service.yaml
   - rainloop-pvc.yaml
+  - dovecot-deployment.yaml
