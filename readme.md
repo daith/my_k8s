@@ -17,6 +17,9 @@ microk8s enable dns storage ingress
 
 microk8s status --wait-ready
 
+microk8s kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.4/cert-manager.yaml
+
+
 cd my_k8s
 microk8s kubectl apply -k ./overlays/prod
 
