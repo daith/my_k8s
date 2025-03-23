@@ -10,3 +10,5 @@ resources:
   - postfixadmin-deployment.yaml
   - postfixadmin-service.yaml
   - ingress.yaml
+  - rainloop-deployment.yaml
+  - rainloop-service.yaml
