@@ -31,5 +31,31 @@ microk8s kubectl logs deploy/odoo
 microk8s kubectl get svc | grep odoo
 
 
+sudo tee /etc/nginx/sites-available/mail-service <<'EOF'
+server {
+    listen 80;
+    server_name mail.foson.co;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+        allow all;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:30080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+EOF
+
+sudo ln -s /etc/nginx/sites-available/mail-service /etc/nginx/sites-enabled/
+
+sudo nginx -t && sudo systemctl reload nginx
+
+sudo certbot certonly --webroot -w /var/www/certbot -d mail.foson.co
+
 ```
 
