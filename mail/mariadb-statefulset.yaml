@@ -1,14 +1,4 @@
-# mail/mariadb.yaml
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mariadb-pvc
-spec:
-  accessModes: [ReadWriteOnce]
-  resources:
-    requests:
-      storage: 5Gi
----
+# mail/mariadb-statefulset.yaml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -45,15 +35,3 @@ spec:
       - name: mariadb-storage
         persistentVolumeClaim:
           claimName: mariadb-pvc
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mariadb
-spec:
-  selector:
-    app: mariadb
-  ports:
-    - protocol: TCP
-      port: 3306
-      targetPort: 3306
