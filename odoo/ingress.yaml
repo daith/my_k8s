@@ -3,15 +3,15 @@ kind: Ingress
 metadata:
   name: odoo-ingress
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-http"
+    cert-manager.io/cluster-issuer: letsencrypt-http
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   tls:
     - hosts:
-        - 43.228.217.97.nip.io
+        - odoo.foson.co
       secretName: odoo-tls
   rules:
-    - host: 43.228.217.97.nip.io
+    - host: odoo.foson.co
       http:
         paths:
           - path: /
@@ -21,4 +21,3 @@ spec:
                 name: odoo
                 port:
                   number: 8069
-
