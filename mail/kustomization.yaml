@@ -12,3 +12,4 @@ resources:
   - ingress.yaml
   - rainloop-deployment.yaml
   - rainloop-service.yaml
+  - rainloop-pvc.yaml

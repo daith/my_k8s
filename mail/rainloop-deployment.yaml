@@ -13,7 +13,14 @@ spec:
         app: rainloop
     spec:
       containers:
-      - name: rainloop
-        image: hardware/rainloop
-        ports:
-        - containerPort: 80
+        - name: rainloop
+          image: hardware/rainloop
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: rainloop-storage
+              mountPath: /rainloop/data
+      volumes:
+        - name: rainloop-storage
+          persistentVolumeClaim:
+            claimName: rainloop-pvc
