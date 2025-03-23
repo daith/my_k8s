@@ -23,5 +23,13 @@ microk8s kubectl apply -f https://github.com/cert-manager/cert-manager/releases/
 cd my_k8s
 microk8s kubectl apply -k ./overlays/prod
 
+
+microk8s kubectl get pods | grep odoo
+
+microk8s kubectl logs deploy/odoo
+
+microk8s kubectl get svc | grep odoo
+
+
 ```
 

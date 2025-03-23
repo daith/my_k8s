@@ -18,12 +18,16 @@ spec:
           ports:
             - containerPort: 8069
           env:
-            - name: HOST
-              value: "postgres"
-            - name: USER
-              value: "odoo"
-            - name: PASSWORD
-              value: "odoo"
+            - name: POSTGRES_DB
+              value: odoo
+            - name: POSTGRES_USER
+              value: odoo
+            - name: POSTGRES_PASSWORD
+              value: odoo
+            - name: DB_HOST
+              value: postgres
+            - name: DB_PORT
+              value: "5432"
           volumeMounts:
             - name: odoo-data
               mountPath: /var/lib/odoo  # Odoo 數據
