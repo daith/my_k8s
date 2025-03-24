@@ -4,14 +4,14 @@ metadata:
   name: letsencrypt-dns-godaddy
 spec:
   acme:
-    email: your@email.com
+    email: YOUR_EMAIL  # ⛔請改成你真的 email，Let's Encrypt 會發通知
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
-      name: letsencrypt-dns-godaddy-key
+      name: letsencrypt-dns-godaddy-key  # ⛔ 沒建立的話會自動生成，確認無誤即可
     solvers:
       - dns01:
           webhook:
-            groupName: acme.foson.co    # 👈 必須與 Helm 中 set 的 groupName 一致
+            groupName: acme.foson.co
             solverName: godaddy
             config:
               apiKeySecretRef:
