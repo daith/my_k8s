@@ -17,8 +17,6 @@ spec:
               apiKeySecretRef:
                 name: godaddy-api-secret
                 key: GODADDY_API_KEY
-                namespace: mail
               apiSecretSecretRef:
                 name: godaddy-api-secret
                 key: GODADDY_API_SECRET
-                namespace: mail
