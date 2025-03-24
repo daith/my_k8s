@@ -17,7 +17,6 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - mail.foson.co
         - webmail.foson.co
       secretName: mailserver-tls
   rules:

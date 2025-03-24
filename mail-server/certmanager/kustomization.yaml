@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - clusterissuer-godaddy.yaml
+
+secretGenerator:
+  - name: godaddy-api-secret
+    envs:
+      - .env
+
+generatorOptions:
+  disableNameSuffixHash: true

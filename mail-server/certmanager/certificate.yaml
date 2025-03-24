@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mailserver-cert
+  namespace: mail
+spec:
+  secretName: mailserver-tls-dns
+  duration: 2160h
+  renewBefore: 360h
+  commonName: mail.foson.co
+  dnsNames:
+    - mail.foson.co
+  issuerRef:
+    name: letsencrypt-dns-godaddy
+    kind: ClusterIssuer

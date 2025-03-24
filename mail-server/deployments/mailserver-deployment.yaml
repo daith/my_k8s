@@ -17,21 +17,33 @@ spec:
         - name: mailserver
           image: mailserver/docker-mailserver:latest
           ports:
-            - containerPort: 25
-            - containerPort: 587
-            - containerPort: 993
+            - containerPort: 25   # SMTP
+            - containerPort: 587  # Submission
+            - containerPort: 993  # IMAPS
           envFrom:
             - configMapRef:
                 name: mail-config
             - secretRef:
                 name: mail-secrets
-          volumeMounts:
-            - name: maildata
-              mountPath: /var/mail
           env:
             - name: OVERRIDE_HOSTNAME
               value: mail.foson.co
+            - name: SSL_TYPE
+              value: manual
+            - name: SSL_CERT_PATH
+              value: /etc/ssl/mail/tls.crt
+            - name: SSL_KEY_PATH
+              value: /etc/ssl/mail/tls.key
+          volumeMounts:
+            - name: maildata
+              mountPath: /var/mail
+            - name: tls-certs
+              mountPath: /etc/ssl/mail
+              readOnly: true
       volumes:
         - name: maildata
           persistentVolumeClaim:
             claimName: maildata
+        - name: tls-certs
+          secret:
+            secretName: mailserver-tls-dns
