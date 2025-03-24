@@ -29,7 +29,7 @@ spec:
             - name: maildata
               mountPath: /var/mail
           env:
-            - name: DMS_HOSTNAME
+            - name: OVERRIDE_HOSTNAME
               value: mail.foson.co
       volumes:
         - name: maildata
