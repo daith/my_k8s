@@ -6,11 +6,13 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-dns-godaddy
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
         - webmail.foson.co
+        - mail.foson.co
       secretName: mailserver-tls-dns  # ✅ 改成你 DNS-01 證書產生的 Secret 名稱
   rules:
     - host: mail.foson.co
