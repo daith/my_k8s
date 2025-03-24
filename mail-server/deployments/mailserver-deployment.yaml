@@ -13,6 +13,12 @@ spec:
       labels:
         app: mailserver
     spec:
+      hostname: mail.foson.co
+      hostAliases:
+        - ip: "127.0.0.1"
+          hostnames:
+            - mail.foson.co
+            - foson.co
       containers:
         - name: mailserver
           image: mailserver/docker-mailserver:latest
@@ -28,11 +34,6 @@ spec:
           volumeMounts:
             - name: maildata
               mountPath: /var/mail
-          env:
-            - name: HOSTNAME
-              value: mail.foson.co
-            - name: DOMAINNAME
-              value: foson.co
       volumes:
         - name: maildata
           persistentVolumeClaim:
