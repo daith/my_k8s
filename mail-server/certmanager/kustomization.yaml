@@ -5,7 +5,7 @@ namespace: mail  # 👈 加這行！
 
 
 resources:
-  - clusterissuer-godaddy.yaml
+  - clusterissuer-godaddy.yaml  # ⛔ ClusterIssuer 是 cluster-scope，不能加 namespace！
 
 secretGenerator:
   - name: godaddy-api-secret
