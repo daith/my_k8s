@@ -4,7 +4,7 @@ metadata:
   name: letsencrypt-dns-godaddy
 spec:
   acme:
-    email: YOUR_EMAIL  # ⛔請改成你真的 email，Let's Encrypt 會發通知
+    email: ${YOUR_EMAIL} 
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt-dns-godaddy-key  # ⛔ 沒建立的話會自動生成，確認無誤即可
