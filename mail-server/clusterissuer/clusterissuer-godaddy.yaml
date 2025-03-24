@@ -4,7 +4,7 @@ metadata:
   name: letsencrypt-dns-godaddy
 spec:
   acme:
-    email: ${YOUR_EMAIL} 
+    email: rin397@gmail.com
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt-dns-godaddy-key  # ⛔ 沒建立的話會自動生成，確認無誤即可
@@ -17,6 +17,8 @@ spec:
               apiKeySecretRef:
                 name: godaddy-api-secret
                 key: GODADDY_API_KEY
+                namespace: mail
               apiSecretSecretRef:
                 name: godaddy-api-secret
                 key: GODADDY_API_SECRET
+                namespace: mail
