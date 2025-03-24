@@ -13,8 +13,6 @@ spec:
       labels:
         app: mailserver
     spec:
-      hostname: mail.foson.co
-      subdomain: foson.co
       containers:
         - name: mailserver
           image: mailserver/docker-mailserver:latest
