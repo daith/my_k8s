@@ -28,6 +28,11 @@ spec:
           volumeMounts:
             - name: maildata
               mountPath: /var/mail
+          env:
+            - name: HOSTNAME
+              value: mail.foson.co
+            - name: DOMAINNAME
+              value: foson.co
       volumes:
         - name: maildata
           persistentVolumeClaim:
