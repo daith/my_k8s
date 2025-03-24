@@ -4,12 +4,27 @@ metadata:
   name: mailserver-cert
   namespace: mail
 spec:
+  # 產出後的憑證 Secret 名稱
   secretName: mailserver-tls-dns
+
+  # 憑證有效時間為 90 天（2160 小時），提前 15 天（360 小時）自動更新
   duration: 2160h
   renewBefore: 360h
+
+  # 憑證主體名稱（Common Name）
   commonName: mail.foson.co
+
+  # 支援的 DNS 名稱（Subject Alternative Names / SAN）
   dnsNames:
     - mail.foson.co
+
+  # 建議明確指定用法（可省略，但建議保留）
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth
+
+  # 使用的 ClusterIssuer（你自己設的 DNS-01 issuer）
   issuerRef:
     name: letsencrypt-dns-godaddy
     kind: ClusterIssuer
