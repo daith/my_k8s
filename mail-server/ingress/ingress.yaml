@@ -7,9 +7,11 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-http
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/configuration-snippet: |
+    nginx.ingress.kubernetes.io/server-snippet: |
       location ^~ /.well-known/acme-challenge/ {
-        allow all;
+        default_type "text/plain";
+        root /usr/share/nginx/html;
+        try_files $uri =404;
       }
 spec:
   tls:
