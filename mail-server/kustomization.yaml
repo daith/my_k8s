@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: mail
+resources:
+  - namespace.yaml
+  - certmanager/cluster-issuer.yaml
+  - config/mail-configmap.yaml
+  - secrets/mail-secrets.yaml
+  - pvc/maildata-pvc.yaml
+  - pvc/rainloop-pvc.yaml
+  - deployments/mailserver-deployment.yaml
+  - deployments/rainloop-deployment.yaml
+  - services/mailserver-service.yaml
+  - services/rainloop-service.yaml
+  - ingress/ingress.yaml

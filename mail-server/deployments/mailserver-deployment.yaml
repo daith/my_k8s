@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mailserver
+  namespace: mail
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mailserver
+  template:
+    metadata:
+      labels:
+        app: mailserver
+    spec:
+      containers:
+        - name: mailserver
+          image: mailserver/docker-mailserver:latest
+          ports:
+            - containerPort: 25
+            - containerPort: 587
+            - containerPort: 993
+          envFrom:
+            - configMapRef:
+                name: mail-config
+            - secretRef:
+                name: mail-secrets
+          volumeMounts:
+            - name: maildata
+              mountPath: /var/mail
+      volumes:
+        - name: maildata
+          persistentVolumeClaim:
+            claimName: maildata

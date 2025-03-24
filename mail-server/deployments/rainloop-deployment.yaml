@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: rainloop
+  namespace: mail
 spec:
   replicas: 1
   selector:
@@ -14,13 +15,13 @@ spec:
     spec:
       containers:
         - name: rainloop
-          image: ghcr.io/newargus/docker-rainloop:latest
+          image: hardware/rainloop
           ports:
-            - containerPort: 8888
+            - containerPort: 80
           volumeMounts:
-            - name: rainloop-storage
+            - name: rainloop-data
               mountPath: /rainloop/data
       volumes:
-        - name: rainloop-storage
+        - name: rainloop-data
           persistentVolumeClaim:
-            claimName: rainloop-pvc
+            claimName: rainloop-data
