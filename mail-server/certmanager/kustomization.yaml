@@ -1,12 +1,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: mail  # ✅ secret 是 namespaced 資源，所以可以指定
-
-secretGenerator:
-  - name: godaddy-api-secret
-    envs:
-      - godaddy-api-secret.env
-
-generatorOptions:
-  disableNameSuffixHash: true
+resources:
+  - clusterissuer-godaddy.yaml
