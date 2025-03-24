@@ -3,3 +3,5 @@ kind: Kustomization
 
 resources:
   - clusterissuer-godaddy.yaml
+  - godaddy-api-secret.yaml
+  - certificate.yaml
