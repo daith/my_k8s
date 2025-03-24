@@ -4,21 +4,14 @@ metadata:
   name: mailserver-ingress
   namespace: mail
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-http
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-    nginx.ingress.kubernetes.io/server-snippet: |
-      location ^~ /.well-known/acme-challenge/ {
-        default_type "text/plain";
-        root /usr/share/nginx/html;
-        try_files $uri =404;
-      }
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
         - webmail.foson.co
-      secretName: mailserver-tls
+      secretName: mailserver-tls-dns  # ✅ 改成你 DNS-01 證書產生的 Secret 名稱
   rules:
     - host: mail.foson.co
       http:
@@ -40,4 +33,3 @@ spec:
                 name: rainloop
                 port:
                   number: 80
-                  
